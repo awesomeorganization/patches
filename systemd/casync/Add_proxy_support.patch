@@ -1,0 +1,36 @@
+From: sergeysedoy97 <sergey.sedoy.97@icloud.com>
+Subject: [PATCH] src/casync-http: Add proxy support
+
+This patch adds support for CASYNC_CURLOPT_PROXY environment to set CURLOPT_PROXY option.
+---
+ src/casync-http.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/src/casync-http.c b/src/casync-http.c
+index 43809c3..fb50256 100644
+--- a/src/casync-http.c
++++ b/src/casync-http.c
+@@ -4,6 +4,7 @@
+ #include <getopt.h>
+ #include <stddef.h>
+ #include <unistd.h>
++#include <stdlib.h>
+
+ #include "caprotocol.h"
+ #include "caremote.h"
+@@ -464,6 +465,14 @@ static int run(int argc, char *argv[]) {
+                 }
+         }
+
++        if (getenv("CASYNC_CURLOPT_PROXY") != NULL) {
++                if (curl_easy_setopt(curl, CURLOPT_PROXY, getenv("CASYNC_CURLOPT_PROXY")) != CURLE_OK) {
++                        log_error("Failed to set CASYNC_CURLOPT_PROXY.");
++                        r = -EIO;
++                        goto finish;
++                }
++        }
++
+         /* (void) curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L); */
+
+         if (archive_url) {
+--
