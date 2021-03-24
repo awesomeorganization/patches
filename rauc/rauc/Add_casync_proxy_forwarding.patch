@@ -1,0 +1,23 @@
+From: sergeysedoy97 <sergey.sedoy.97@icloud.com>
+Subject: [PATCH] src/update_handler: Add casync proxy forwarding
+
+This patch adds proxy forwarding from RAUC_CURLOPT_PROXY environment value to CASYNC_CURLOPT_PROXY one.
+---
+ src/update_handler.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/src/update_handler.c b/src/update_handler.c
+index a3051cc..0f5cb26 100644
+--- a/src/update_handler.c
++++ b/src/update_handler.c
+@@ -266,6 +266,9 @@ static gboolean casync_extract(RaucImage *image, gchar *dest, int out_fd, const
+ 	if (tmpdir)
+ 		g_subprocess_launcher_setenv(launcher, "TMPDIR", tmpdir, TRUE);
+
++	if (getenv("RAUC_CURLOPT_PROXY") != NULL)
++		g_subprocess_launcher_setenv(launcher, "CASYNC_CURLOPT_PROXY", getenv("RAUC_CURLOPT_PROXY"), TRUE);
++
+ 	sproc = r_subprocess_launcher_spawnv(launcher, args, &ierror);
+ 	if (sproc == NULL) {
+ 		g_propagate_prefixed_error(
+--
