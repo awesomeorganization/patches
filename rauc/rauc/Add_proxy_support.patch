@@ -1,0 +1,23 @@
+From: sergeysedoy97 <sergey.sedoy.97@icloud.com>
+Subject: [PATCH] src/network: Add proxy support
+
+This patch adds support for RAUC_CURLOPT_PROXY environment to set CURLOPT_PROXY option.
+---
+ src/network.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/src/network.c b/src/network.c
+index 3dcf4c0..83d94a8 100644
+--- a/src/network.c
++++ b/src/network.c
+@@ -108,6 +108,9 @@ static gboolean transfer(RaucTransfer *xfer, GError **error)
+ 	curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, "");
+ 	curl_easy_setopt(curl, CURLOPT_NETRC, CURL_NETRC_OPTIONAL);
+
++	if (getenv("RAUC_CURLOPT_PROXY") != NULL)
++		curl_easy_setopt(curl, CURLOPT_PROXY, getenv("RAUC_CURLOPT_PROXY"));
++
+ 	/* set error buffer empty before performing a request */
+ 	errbuf[0] = 0;
+
+--
