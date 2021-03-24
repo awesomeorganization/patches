@@ -1,0 +1,46 @@
+From: sergeysedoy97 <sergey.sedoy.97@icloud.com>
+Subject: [PATCH] reconnectToAuthService: Add retry attempts
+
+---
+ lib/defaults/defaults.go | 3 +++
+ lib/service/connect.go   | 5 ++++-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/lib/defaults/defaults.go b/lib/defaults/defaults.go
+index 9617ee295..2f8bbcdcf 100644
+--- a/lib/defaults/defaults.go
++++ b/lib/defaults/defaults.go
+@@ -400,6 +400,9 @@ var (
+
+ 	// AsyncBufferSize is a default buffer size for async emitters
+ 	AsyncBufferSize = 1024
++
++	// MaxRetryAttempts is a maximum connection attempts to the auth service
++	MaxRetryAttempts = 10
+ )
+
+ // Default connection limits, they can be applied separately on any of the Teleport
+diff --git a/lib/service/connect.go b/lib/service/connect.go
+index 0d73b66dd..fe7a5ac58 100644
+--- a/lib/service/connect.go
++++ b/lib/service/connect.go
+@@ -44,7 +44,8 @@ import (
+ // service until succeeds or process gets shut down
+ func (process *TeleportProcess) reconnectToAuthService(role teleport.Role) (*Connector, error) {
+ 	retryTime := defaults.HighResPollingPeriod
+-	for {
++	maxRetryAttempts := defaults.MaxRetryAttempts
++	for retryAttempt := 0; retryAttempt != maxRetryAttempts; retryAttempt++ {
+ 		connector, err := process.connectToAuthService(role)
+ 		if err == nil {
+ 			// if connected and client is present, make sure the connector's
+@@ -70,6 +71,8 @@ func (process *TeleportProcess) reconnectToAuthService(role teleport.Role) (*Con
+ 			return nil, ErrTeleportExited
+ 		}
+ 	}
++	process.Infof("%v exceeded the limit of connection attempts, teleport is shutting down.", role)
++	return nil, ErrTeleportExited
+ }
+
+ // connectToAuthService attempts to login into the auth servers specified in the
+--
