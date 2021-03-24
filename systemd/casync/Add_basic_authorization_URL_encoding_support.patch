@@ -1,0 +1,23 @@
+From: sergeysedoy97 <sergey.sedoy.97@icloud.com>
+Subject: [PATCH] src/util: Add basic authorization URL encoding support
+
+A client may avoid a login prompt when accessing a basic access authentication by prepending username:password@ to the hostname in the URL.
+This patch adds support for unsafe ASCII characters in username and password.
+---
+ src/util.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/util.h b/src/util.h
+index dc9d03e..899ff74 100644
+--- a/src/util.h
++++ b/src/util.h
+@@ -421,7 +421,7 @@ static inline int parse_gid(const char *s, gid_t *ret_gid) {
+ /* This is a bit more restricted than RFC3986 */
+ #define URL_PROTOCOL_FIRST ALPHABET_LOWER
+ #define URL_PROTOCOL_CHARSET ALPHABET_LOWER DIGITS "+.-"
+-#define HOSTNAME_CHARSET ALPHABET DIGITS "-_."
++#define HOSTNAME_CHARSET ALPHABET DIGITS "-_.%"
+
+ int wait_for_terminate(pid_t pid, siginfo_t *status);
+
+--
