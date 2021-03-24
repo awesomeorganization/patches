@@ -1,0 +1,46 @@
+From: sergeysedoy97 <sergey.sedoy.97@icloud.com>
+Subject: [PATCH] properties: Remove Spring Security user values
+
+---
+ .../src/main/resources/hawkbit-security-defaults.properties | 6 +++---
+ .../src/main/resources/application.properties               | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/hawkbit-autoconfigure/src/main/resources/hawkbit-security-defaults.properties b/hawkbit-autoconfigure/src/main/resources/hawkbit-security-defaults.properties
+index 6b94c1003..642e3a73f 100644
+--- a/hawkbit-autoconfigure/src/main/resources/hawkbit-security-defaults.properties
++++ b/hawkbit-autoconfigure/src/main/resources/hawkbit-security-defaults.properties
+@@ -8,8 +8,8 @@
+ #
+
+ # User Security
+-spring.security.user.name=admin
+-spring.security.user.password={noop}admin
++#spring.security.user.name=admin
++#spring.security.user.password={noop}admin
+
+ # DDI and download security
+ hawkbit.server.ddi.security.authentication.header.enabled=false
+@@ -17,4 +17,4 @@ hawkbit.server.ddi.security.authentication.header.authority=
+ hawkbit.server.ddi.security.authentication.targettoken.enabled=false
+ hawkbit.server.ddi.security.authentication.gatewaytoken.enabled=false
+ hawkbit.server.download.anonymous.enabled=false
+-hawkbit.server.ddi.security.authentication.gatewaytoken.key=
+\ No newline at end of file
++hawkbit.server.ddi.security.authentication.gatewaytoken.key=
+diff --git a/hawkbit-runtime/hawkbit-update-server/src/main/resources/application.properties b/hawkbit-runtime/hawkbit-update-server/src/main/resources/application.properties
+index a557a4ed2..1410bc726 100644
+--- a/hawkbit-runtime/hawkbit-update-server/src/main/resources/application.properties
++++ b/hawkbit-runtime/hawkbit-update-server/src/main/resources/application.properties
+@@ -8,8 +8,8 @@
+ #
+
+ # User Security
+-spring.security.user.name=admin
+-spring.security.user.password={noop}admin
++#spring.security.user.name=admin
++#spring.security.user.password={noop}admin
+ spring.main.allow-bean-definition-overriding=true
+
+ # Http Encoding
+--
